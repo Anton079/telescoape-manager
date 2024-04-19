@@ -18,17 +18,70 @@ namespace telescoape_manager
 
         public void LoadData()
         {
-            User User1 = new User("1", "andrei@gmail.com", "fewgfweg", 07457541);
-            User User2 = new User("2", "mihai@gmail.com", "yun", 074124912);
-            User User3 = new User("3", "mihai@gmail.com", "gtrhr", 07452352);
-            User User4 = new User("4", "antonio@gmail.com", "fwefw", 07453252);
-            User User5 = new User("5", "Raul@gmail.com", "liulfngfn", 0746546542);
+            try
+            {
+                using (StreamReader sr = new StreamReader(this.GetFilePath()))
+                {
+                    string line = "";
+                    while((line = sr.ReadLine()) != null)
+                    {
+                        User user = new User(line);
+                        this._UserS.Add(user);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
 
-            this._UserS.Add(User1);
-            this._UserS.Add(User2);
-            this._UserS.Add(User3);
-            this._UserS.Add(User4);
-            this._UserS.Add(User5);
+        private String GetFilePath()
+        {
+            string currentDirectory = Directory.GetCurrentDirectory();
+
+            string folder = Path.Combine(currentDirectory, "data");
+
+            string file = Path.Combine(folder, "users");
+
+            return file;
+        }
+
+        public string ToSaveAll()
+        {
+            String save = "";
+
+            for (int i = 0; i < _userS.Count - 1; i++)
+            {
+                save += _userS[i].ToSave() + "\n";
+            }
+
+            save += _userS[_userS.Count - 1].ToSave();
+
+            return save;
+        }
+
+
+        public void SaveData()
+        {
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(this.GetFilePath()))
+                {
+                    sw.Write(ToSaveAll());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+        public void GenerateNr()
+        {
+            Random rnd = new Random();
+
+            int randomNumber = rnd.Next(1, 10000000);
         }
 
         public void AfisareUser()
