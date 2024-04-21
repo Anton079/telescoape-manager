@@ -36,7 +36,7 @@ namespace telescoape_manager
             }
         }
 
-        private String GetFilePath()
+        public String GetFilePath()
         {
             string currentDirectory = Directory.GetCurrentDirectory();
 
@@ -51,12 +51,12 @@ namespace telescoape_manager
         {
             String save = "";
 
-            for (int i = 0; i < _userS.Count - 1; i++)
+            for (int i = 0; i < _UserS.Count - 1; i++)
             {
-                save += _userS[i].ToSave() + "\n";
+                save += _UserS[i].ToSave() + "\n";
             }
 
-            save += _userS[_userS.Count - 1].ToSave();
+            save += _UserS[_UserS.Count - 1].ToSave();
 
             return save;
         }
@@ -90,6 +90,28 @@ namespace telescoape_manager
             {
                 Console.WriteLine(x.UserInfo());
             }
+        }
+
+        public int FindUserById(int id)
+        {
+            foreach(User x in _UserS)
+            {
+                if(x.Id == id)
+                {
+                    return id;
+                }
+            }
+            return -1;
+        }
+
+        public bool AddUser(User user)
+        {
+            if(FindUserById(user.Id) == -1)
+            {
+                this._UserS.Add(user);
+                return true;
+            }
+            return false;
         }
     }
 }
